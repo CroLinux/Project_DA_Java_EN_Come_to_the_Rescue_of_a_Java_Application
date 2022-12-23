@@ -70,19 +70,26 @@ public class AnalyticsCounter {
 	 * @throws Exception Display a message if the program can't write the output
 	 *                   file.
 	 */
-	public void writeDataIntoTheFile() throws Exception {
+	public void writeDataIntoTheFile() {
+		BufferedWriter targetFile = null;
 		try {
-			BufferedWriter targetFile = new BufferedWriter(new FileWriter(outputFile, false));
+			targetFile = new BufferedWriter(new FileWriter(outputFile, false));
 			for (Map.Entry<String, Integer> entry : tabSorted.entrySet()) {
 				targetFile.write(entry.getKey() + ": " + entry.getValue());
 				targetFile.newLine();
 			}
-			targetFile.close();
 			displayProcessing();
 		} catch (IOException e) {
 			System.out.println("Error : " + e.getMessage());
 			System.out.println("The output file '" + outputFile + "' can't be generated!");
+		} finally {
+			try {
+				targetFile.close();
+			} catch (IOException e) {
+				System.out.println("Error : " + e.getMessage());
+			}
 		}
+
 	}
 
 	/**
@@ -104,7 +111,7 @@ public class AnalyticsCounter {
 	 * @param args
 	 * @throws Exception
 	 */
-	public static void main(String args[]) throws Exception {
+	public static void main(String args[]) {
 		AnalyticsCounter AC = new AnalyticsCounter();
 
 		AC.readFileContents();
